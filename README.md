@@ -1,12 +1,10 @@
 # Actions
 
+This repo is forked from [pyTooling/Actions: Reusable steps and workflows for
+GitHub Actions](https://github.com/pyTooling/Actions) and modified for use at
+Zeit Medical.
+
 Reusable steps and workflows for GitHub Actions, focused on Python packages.
-
-GitHub Actions workflows, actions and documentation are mostly focused on JavaScript/TypeScript as the scripting
-language for writing reusable CI code.
-However, Python being equally popular and capable, usage of JS/TS might be bypassed, with some caveats.
-This repository gathers reusable CI tooling for testing, packaging and distributing Python projects and documentation.
-
 
 ## Context
 
@@ -169,9 +167,7 @@ Find further usage cases in the following list of projects:
 
 ## Contributors
 
-* [Patrick Lehmann](https://GitHub.com/Paebbels)
-* [Unai Martinez-Corral](https://GitHub.com/umarcor) (Maintainer)
-* [and more...](https://GitHub.com/pyTooling/Actions/graphs/contributors)
+* [Gerrit Egnew](https://github.com/gegnew)
 
 
 ## License

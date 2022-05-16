@@ -34,24 +34,10 @@ on:
         required: false
         default: ''
         type: string
-      pacboy:
-        description: 'MSYS2 dependencies to be installed through pacboy (pacman).'
-        required: false
-        default: >-
-            python-pip:p
-            python-wheel:p
-            python-coverage:p
-            python-lxml:p
-        type: string
-      mingw_requirements:
-        description: 'Override Python dependencies to be installed through pip on MSYS2 (MINGW64) only.'
-        required: false
-        default: ''
-        type: string
       test_command:
         description: 'Test command to run'
         required: false
-        default: 'pipenv run test -svvv -rA'
+        default: 'pdm run -v test -svvv -rA'
         type: string
       artifact:
         description: "Generate unit test report with junitxml and upload results as an artifact."
@@ -78,43 +64,33 @@ jobs:
       - name: ⏬ Checkout repository
         uses: actions/checkout@v2
 
-      - name: '🟦 Setup MSYS2'
-        if: matrix.system == 'msys2'
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW64
-          update: true
-          pacboy: ${{ inputs.pacboy }}
-
-      - name: 🐍 Setup Python ${{ matrix.python }}
-        if: matrix.system != 'msys2'
-        uses: actions/setup-python@v2
+      - name: 🐍 Set up PDM
+        if: inputs.pdm == 'true'
+        uses: pdm-project/setup-pdm@v2
         with:
           python-version: ${{ matrix.python }}
 
-      - name: ⚙️  Install pipenv
+      - name: ⚙️ Set cache variables
+        id: set_variables
         run: |
-          python -m pip install --upgrade pipenv wheel
+          echo "::set-output name=PIP_CACHE::$(pip cache dir)"
+          echo "::set-output name=PDM_CACHE::$(pdm config cache_dir)"
 
-      - id: cache-pipenv
-        uses: actions/cache@v1
+      - name: ⚙️ Set up cache
+        id: cache_deps
+        uses: actions/cache@v2
         with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+          path: |
+            ${{ steps.set_variables.outputs.PIP_CACHE }}
+            ${{ steps.set_variables.outputs.PDM_CACHE }}
+          key: tests-cache-${{ runner.os }}-${{ matrix.python }}
 
       - name: 🔧 Install dependencies
-        if: matrix.system != 'msys2' && steps.cache-pipenv.outputs.cache-hit != 'true'
+        if: matrix.system != 'msys2' && inputs.pdm == 'true'
+        uses: pdm-project/setup-pdm@v2
         run: |
-          pipenv install --deploy --dev ${{ inputs.requirements }}
-
-      - name: 🔧 Install pip dependencies
-        if: matrix.system == 'msys2'
-        run: |
-          if [ 'x${{ inputs.mingw_requirements }}' != 'x' ]; then
-            python -m pipenv install --deploy --dev ${{ inputs.mingw_requirements }}
-          else
-            python -m pipenv install ${{ inputs.requirements }}
-          fi
+          pdm use -f ${{ matrix.python }}
+          pdm install -dG test
 
       - name: ☑  Run unit tests
         if: matrix.system == 'windows'

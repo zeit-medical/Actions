@@ -1,10 +1,11 @@
 # ==================================================================================================================== #
 # Authors:                                                                                                             #
+#   Gerrit Egnew
 #   Patrick Lehmann                                                                                                    #
 #   Unai Martinez-Corral                                                                                               #
 #                                                                                                                      #
 # ==================================================================================================================== #
-# Copyright 2020-2022 The pyTooling Authors                                                                            #
+# Copyright 2022 Zeit Medical
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -135,7 +136,7 @@ jobs:
 
       - name: 📊 Publish coverage at CodeCov
         continue-on-error: true
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           file: ${{ steps.getVariables.outputs.coverage_report_xml }}
           flags: unittests

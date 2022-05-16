@@ -1,10 +1,10 @@
+
 # ==================================================================================================================== #
 # Authors:                                                                                                             #
-#   Patrick Lehmann                                                                                                    #
-#   Unai Martinez-Corral                                                                                               #
-#                                                                                                                      #
+#   Gerrit Egnew
+# Modified from https://github.com/pyTooling/Actions by Patrick Lehmann & Unai Martinez-Corral #
 # ==================================================================================================================== #
-# Copyright 2020-2022 The pyTooling Authors                                                                            #
+# Copyright 2022 Zeit Medical
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -30,7 +30,7 @@ jobs:
   # This job is a workaround for global variables
   # See https://github.com/actions/runner/issues/480
   Params:
-    uses: pyTooling/Actions/.github/workflows/Parameters.yml@main
+    uses: zeit-medical/github-actions/github/workflows/Parameters.yml@main
     with:
       name: ToolName
       # Optional
@@ -39,7 +39,7 @@ jobs:
       python_version_list: '3.8 3.9 3.10'
 
   UnitTesting:
-    uses: pyTooling/Actions/.github/workflows/UnitTesting.yml@main
+    uses: zeit-medical/github/workflows/UnitTesting.yml@main
     needs:
       - Params
     with:
@@ -56,7 +56,7 @@ jobs:
       artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.unittesting }}
 
   Coverage:
-    uses: pyTooling/Actions/.github/workflows/CoverageCollection.yml@main
+    uses: zeit-medical/github/workflows/CoverageCollection.yml@main
     needs:
       - Params
     with:
@@ -68,7 +68,7 @@ jobs:
       codacy_token: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   StaticTypeCheck:
-    uses: pyTooling/Actions/.github/workflows/StaticTypeCheck.yml@main
+    uses: zeit-medical/github-actions/github/workflows/StaticTypeCheck.yml@main
     needs:
       - Params
     with:
@@ -81,7 +81,7 @@ jobs:
       allow_failure: true
 
   PublishTestResults:
-    uses: pyTooling/Actions/.github/workflows/PublishTestResults.yml@main
+    uses: zeit-medical/github-actions/github/workflows/PublishTestResults.yml@main
     needs:
       - UnitTesting
     with:
@@ -89,7 +89,7 @@ jobs:
       report_files: artifacts/**/*.xml
 
   Package:
-    uses: pyTooling/Actions/.github/workflows/Package.yml@main
+    uses: zeit-medical/github-actions/github/workflows/Package.yml@main
     needs:
       - Params
       - Coverage
@@ -100,7 +100,7 @@ jobs:
       requirements: 'wheel'
 
   Release:
-    uses: pyTooling/Actions/.github/workflows/Release.yml@main
+    uses: zeit-medical/github-actions/github/workflows/Release.yml@main
     if: startsWith(github.ref, 'refs/tags')
     needs:
       - UnitTesting
@@ -109,7 +109,7 @@ jobs:
       - Package
 
   PublishOnPyPI:
-    uses: pyTooling/Actions/.github/workflows/PublishOnPyPI.yml@main
+    uses: zeit-medical/github-actions/github/workflows/PublishOnPyPI.yml@main
     if: startsWith(github.ref, 'refs/tags')
     needs:
       - Params
@@ -124,7 +124,7 @@ jobs:
       PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 
   VerifyDocs:
-    uses: pyTooling/Actions/.github/workflows/VerifyDocs.yml@main
+    uses: zeit-medical/github-actions/github-actions/github/workflows/VerifyDocs.yml@main
     needs:
       - Params
     with:
@@ -132,7 +132,7 @@ jobs:
       python_version: ${{ fromJson(needs.Params.outputs.params).python_version }}
 
   BuildTheDocs:
-    uses: pyTooling/Actions/.github/workflows/BuildTheDocs.yml@main
+    uses: zeit-medical/github-actions/github-actions/github/workflows/BuildTheDocs.yml@main
     needs:
       - Params
       - VerifyDocs
@@ -140,7 +140,7 @@ jobs:
       artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.doc }}
 
   PublishToGitHubPages:
-    uses: pyTooling/Actions/.github/workflows/PublishToGitHubPages.yml@main
+    uses: zeit-medical/github-actions/github-actions/github/workflows/PublishToGitHubPages.yml@main
     needs:
       - Params
       - BuildTheDocs
@@ -153,7 +153,7 @@ jobs:
       typing: ${{ fromJson(needs.Params.outputs.params).artifacts.typing }}
 
   ArtifactCleanUp:
-    uses: pyTooling/Actions/.github/workflows/ArtifactCleanUp.yml@main
+    uses: zeit-medical/github-actions/github-actions/github/workflows/ArtifactCleanUp.yml@main
     needs:
       - Params
       - PublishTestResults

@@ -1,10 +1,11 @@
 # ==================================================================================================================== #
 # Authors:                                                                                                             #
+#   Gerrit Egnew
 #   Patrick Lehmann                                                                                                    #
 #   Unai Martinez-Corral                                                                                               #
 #                                                                                                                      #
 # ==================================================================================================================== #
-# Copyright 2020-2022 The pyTooling Authors                                                                            #
+# Copyright 2022 Zeit Medical
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -33,7 +34,7 @@ on:
       requirements:
         description: 'Python dependencies to be installed through pip.'
         required: false
-        default: '-r tests/requirements.txt'
+        default: ''
         type: string
       unittest_directory:
         description: 'Path to the directory containing unit tests.'
@@ -49,10 +50,6 @@ on:
         description: 'Name of the coverage artifact.'
         required: true
         type: string
-    secrets:
-      codacy_token:
-        description: 'Token to push result to codacy.'
-        required: true
 
 jobs:
 
@@ -139,15 +136,8 @@ jobs:
 
       - name: 📊 Publish coverage at CodeCov
         continue-on-error: true
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           file: ${{ steps.getVariables.outputs.coverage_report_xml }}
           flags: unittests
           env_vars: PYTHON
-
-      - name: 📉 Publish coverage at Codacy
-        continue-on-error: true
-        uses: codacy/codacy-coverage-reporter-action@master
-        with:
-          project-token: ${{ secrets.codacy_token }}
-          coverage-reports: ${{ steps.getVariables.outputs.coverage_report_xml }}

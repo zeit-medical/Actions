@@ -65,7 +65,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: 🐍 Set up PDM
-        if: inputs.pdm == 'true'
         uses: pdm-project/setup-pdm@v2
         with:
           python-version: ${{ matrix.python }}
@@ -86,8 +85,7 @@ jobs:
           key: tests-cache-${{ runner.os }}-${{ matrix.python }}
 
       - name: 🔧 Install dependencies
-        if: matrix.system != 'msys2' && inputs.pdm == 'true'
-        uses: pdm-project/setup-pdm@v2
+        if: matrix.system != 'msys2'
         run: |
           pdm use -f ${{ matrix.python }}
           pdm install -dG test

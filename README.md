@@ -6,6 +6,31 @@ Zeit Medical.
 
 Reusable steps and workflows for GitHub Actions, focused on Python packages.
 
+## Development
+
+This project uses [commitizen](https://commitizen-tools.github.io/commitizen/)
+for conventional commits and follows [Semantic Versioning](https://semver.org/).
+
+The only dependencies are `commitizen` and `pre-commit` for development. Run
+`make setup` to get started.
+
+Repos that use Actions defined here must reference a release tag. To release a
+new version, create a tag and bump the version with `commitizen`. The
+recommended workflow is:
+```bash
+# Make changes and commit them:
+git cz commit # follow prompt and answer "Y" to "Breaking change?"
+
+# Alternatively, create a commit message and add "BREAKING CHANGE" as the
+# commit message footer.
+
+cz bump --check-consistency --changelog
+```
+
+There is a Github Action that runs this automatically, so all you really need
+to do is create new releases (with `gh release create` or through the UI).
+
+
 ## Context
 
 GitHub Actions supports five procedures to reuse code:

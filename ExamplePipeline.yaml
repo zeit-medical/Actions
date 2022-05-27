@@ -38,6 +38,9 @@ jobs:
       python_version: '3.10'
       python_version_list: '3.8 3.9 3.10'
 
+  BumpVersion:
+    uses: zeit-medical/github/workflows/bumpversion.yml@main
+
   UnitTesting:
     uses: zeit-medical/github/workflows/UnitTesting.yml@main
     needs:

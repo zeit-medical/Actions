@@ -30,6 +30,18 @@ cz bump --check-consistency --changelog
 There is a Github Action that runs this automatically, so all you really need
 to do is create new releases (with `gh release create` or through the UI).
 
+Actions are in `github-actions/.github/workflows/`.
+
+
+## Use these Actions
+These actions are meant to be used for CI in other Zeit repos. The
+`ExamplePipeline.yaml` has a sample pipeline implementing all Actions. See docs
+below for implementation details:
+
+### bumpversion
+
+
+
 
 ## Context
 

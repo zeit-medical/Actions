@@ -4,6 +4,13 @@
 
 ### Feat
 
+## v1.1.1 (2022-05-27)
+
+### Fix
+
+- Test automatic version bump
+- Test automatic version bumping
+
 ## v1.1.0 (2022-05-27)
 
 ### Feat

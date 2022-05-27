@@ -18,9 +18,18 @@ Repos that use Actions defined here must reference a release tag. To release a
 new version, create a tag and bump the version with `commitizen`. The
 recommended workflow is:
 ```bash
-cz bump --check-consistency --changelog
+# Make changes and commit them:
+git cz commit # follow prompt and answer "Y" to "Breaking change?"
 
+# Alternatively, create a commit message and add "BREAKING CHANGE" as the
+# commit message footer.
+
+cz bump --check-consistency --changelog
 ```
+
+There is a Github Action that runs this automatically, so all you really need
+to do is create new releases (with `gh release create` or through the UI).
+
 
 ## Context
 

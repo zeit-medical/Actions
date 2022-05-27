@@ -1,3 +1,13 @@
+### Feat
+
+- Add commitizen
+
+## v1.1.0 (2022-05-27)
+
+### Feat
+
+- Add commitizen
+
 ## v1.0.0 (2022-05-27)
 
 ### Refactor

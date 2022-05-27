@@ -2,6 +2,8 @@
 
 - Add commitizen
 
+### Feat
+
 ## v1.1.0 (2022-05-27)
 
 ### Feat

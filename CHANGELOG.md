@@ -1,3 +1,11 @@
+## v1.0.0 (2022-05-27)
+
+### Refactor
+
+- **all**: Initial Zeit Actions config
+
+## tip (2022-03-02)
+
 ## v0.4.2 (2022-02-22)
 
 ### Feat

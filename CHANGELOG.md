@@ -4,6 +4,12 @@
 
 ### Feat
 
+## v1.2.0 (2022-05-30)
+
+### Feat
+
+- **UnitTesting**: Make PDM optional
+
 ## v1.1.1 (2022-05-27)
 
 ### Fix

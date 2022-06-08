@@ -81,7 +81,7 @@ jobs:
 
       # Set up if we're not using PDM
       - name: 🐍 Setup Python ${{ matrix.python }}
-        if: ${{ github.event.inputs.use_pdm != 'true' }}
+        if: ${{ inputs.use_pdm != true }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
@@ -91,47 +91,47 @@ jobs:
         run: ${{ inputs.run_system }}
 
       - name: ⚙️ Update pip
-        if: ${{ github.event.inputs.use_pdm != 'true' }}
+        if: ${{ inputs.use_pdm != true }}
         run: python -m pip install -U pip
 
       - name: 🔧 Install wheel and pip dependencies
-        if: ${{ github.event.inputs.use_pdm != 'true' }}
+        if: ${{ inputs.use_pdm != true }}
         run: |
           python -m pip install -U wheel ${{ inputs.requirements }}
 
       - name: ⚙️ Set up cache
         id: cache_not_pdm
-        if: ${{ github.event.inputs.use_pdm != 'true' }}
+        if: ${{ inputs.use_pdm != true }}
         uses: actions/cache@v2
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ matrix.python }}-${{ hashFiles('**/Pipfile.lock') }}
 
       - name: 🔧Install dependencies
-        if: ${{ github.event.inputs.use_pdm != 'true' && steps.cache_not_pdm.outputs.cache-hit != 'true' }}
+        if: ${{ inputs.use_pdm != true && steps.cache_not_pdm.outputs.cache-hit != true }}
         run: |
-          echo ${{ github.event.inputs.use_pdm }}
           echo ${{ inputs.use_pdm }}
-          echo ${{ inputs.use_pdm != 'true' }}
+          echo ${{ inputs.use_pdm }}
+          echo ${{ inputs.use_pdm != true }}
           echo ${{ inputs.use_pdm != true}}
           pipenv install --skip-lock --dev
 
       # Set up if we're using PDM
       - name: 🐍 Set up PDM
-        if: ${{ github.event.inputs.use_pdm == 'true' }} 
+        if: ${{ inputs.use_pdm == true }} 
         uses: pdm-project/setup-pdm@v2
         with:
           python-version: ${{ matrix.python }}
 
       - name: ⚙️ Set cache variables
-        if: ${{ github.event.inputs.use_pdm == 'true' }}
+        if: ${{ inputs.use_pdm == true }}
         id: set_variables
         run: |
           echo "::set-output name=PIP_CACHE::$(pip cache dir)"
           echo "::set-output name=PDM_CACHE::$(pdm config cache_dir)"
 
       - name: ⚙️ Set up cache
-        if: ${{ github.event.inputs.use_pdm == 'true' }}
+        if: ${{ inputs.use_pdm == true }}
         uses: actions/cache@v2
         with:
           path: |
@@ -140,7 +140,7 @@ jobs:
           key: tests-cache-${{ runner.os }}-${{ matrix.python }}
 
       - name: 🔧 Install dependencies
-        if: ${{ github.event.inputs.use_pdm == 'true' }}
+        if: ${{ inputs.use_pdm == true }}
         run: |
           pdm use -f ${{ matrix.python }}
           pdm install -dG test
@@ -156,7 +156,7 @@ jobs:
         if: ${{ matrix.system != 'windows' }}
         run: |
           [ 'x${{ inputs.artifact }}' != 'x' ] && PYTEST_ARGS='--junitxml=TestReport.xml' || unset PYTEST_ARGS
-          ${{ github.event.inputs.test_command }} $PYTEST_ARGS --color=yes
+          ${{ inputs.test_command }} $PYTEST_ARGS --color=yes
 
       - name: 📤 Upload 'TestReport.xml' artifact
         if: ${{ inputs.artifact != '' }}

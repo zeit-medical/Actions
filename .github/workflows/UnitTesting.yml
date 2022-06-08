@@ -112,6 +112,8 @@ jobs:
         run: |
           echo ${{ github.event.inputs.use_pdm }}
           echo ${{ inputs.use_pdm }}
+          echo ${{ inputs.use_pdm != 'true' }}
+          echo ${{ inputs.use_pdm != true}}
           pipenv install --skip-lock --dev
 
       # Set up if we're using PDM

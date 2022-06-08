@@ -110,10 +110,6 @@ jobs:
       - name: 🔧Install dependencies
         if: ${{ inputs.use_pdm != true && steps.cache_not_pdm.outputs.cache-hit != true }}
         run: |
-          echo ${{ inputs.use_pdm }}
-          echo ${{ inputs.use_pdm }}
-          echo ${{ inputs.use_pdm != true }}
-          echo ${{ inputs.use_pdm != true}}
           pipenv install --skip-lock --dev
 
       # Set up if we're using PDM

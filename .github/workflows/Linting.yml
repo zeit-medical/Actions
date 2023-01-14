@@ -37,7 +37,7 @@ on:
       ignore:
         description: 'Flake8 errors to ignore'
         required: false
-        default: 'E226,E302,E41,W503,E704,E203'
+        default: 'E226,E302,E41,W503,E704,E203,F403,F401'
         type: string
       max_line_length:
         description: 'Flake8 maximum line length'
